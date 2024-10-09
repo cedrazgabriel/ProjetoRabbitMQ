@@ -1,0 +1,6 @@
+﻿services:
+  projetorabbitmq:
+    image: projetorabbitmq
+    build:
+      context: .
+      dockerfile: ProjetoRabbitMQ/Dockerfile
