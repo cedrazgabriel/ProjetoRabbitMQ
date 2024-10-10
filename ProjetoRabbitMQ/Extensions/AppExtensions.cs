@@ -1,6 +1,5 @@
 ﻿using MassTransit;
-
-namespace ProjetoRabbitMQ.Extensions;
+using ProjetoRabbitMQ.Bus;
 
 internal static class AppExtensions
 {
@@ -8,6 +7,8 @@ internal static class AppExtensions
     {
         services.AddMassTransit(busConfigurator =>
         {
+            busConfigurator.AddConsumer<RelatorioSolicitadoEventConsumer>();
+            
             busConfigurator.UsingRabbitMq((context, configuration) =>
             {
                 configuration.Host(new Uri("amqp://localhost:5672"), host =>
@@ -15,7 +16,7 @@ internal static class AppExtensions
                     host.Username("guest");
                     host.Password("guest");
                 });
-                
+
                 configuration.ConfigureEndpoints(context);
             });
         });

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using MassTransit;
+using Microsoft.AspNetCore.Http.HttpResults;
 using ProjetoRabbitMQ.Relatorios;
 
 namespace ProjetoRabbitMQ.Controllers;
@@ -7,7 +8,7 @@ internal static class ApiEndpoints
 {
     public static void AddApiEndpoints(this WebApplication app)
     {
-        app.MapPost("solicitar-relatorio/{name}", (string name) =>
+        app.MapPost("solicitar-relatorio/{name}", async (string name, IBus bus) =>
         {
             var solicitacao = new SolicitacaoRelatorio()
             {
@@ -18,6 +19,10 @@ internal static class ApiEndpoints
             };
             
             Lista.Relatorios.Add(solicitacao);
+            
+            var eventRequest = new RelatorioSolicitadoEvent(solicitacao.Id, solicitacao.Nome);
+            
+            await bus.Publish(eventRequest);
 
             return Results.Ok(solicitacao);
         });

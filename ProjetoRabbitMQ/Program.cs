@@ -1,5 +1,4 @@
 using ProjetoRabbitMQ.Controllers;
-using ProjetoRabbitMQ.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
